@@ -30,6 +30,15 @@ class BrandRepository extends ServiceEntityRepository
         
         
     }
+    public function findOneByName($name,$doctrine){
+        $brand = BrandRepository::getBrandRepositoryByName($name, $doctrine);
+        if (!$brand) {
+            throw new NotFoundHttpException(
+                'Brand not found!'
+            );
+        }
+        return $brand;
+    }
     public function updateBrand($request, $doctrine){
         
         $entityManager = $doctrine->getManager();
@@ -48,22 +57,42 @@ class BrandRepository extends ServiceEntityRepository
     public function deleteBrand($name,$doctrine){
         
         $sn = $doctrine->getManager();
-        $brand = BrandRepository::getBrandRepositoryByName($name, $doctrine);
+        $brand = self::getBrandRepositoryByName($name, $doctrine);
         if (!$brand) {
             throw new NotFoundHttpException(
                 'Brand not found!'
             );
         }
         else {
-          $sn->remove($brand);
-          $sn->flush();
+            self::deleteModelsByBrand($brand,$doctrine->getManager());
+            $sn->remove($brand);
+            $sn->flush();  
         }
     }
     
-    static public function getBrandRepositoryByName($name, $doctrine){
+    static private function getBrandRepositoryByName($name, $doctrine){
         $brand = $doctrine->getRepository(Brand::class)
                 ->findOneBy(['name' => $name] );
-        return $brand;
+        return $brand;   
+    }
+    static public function getPublicBrandRepositoryByName($name, $doctrine){
+        return self::getBrandRepositoryByName($name, $doctrine);
+        
+    }
+
+
+    static private function deleteModelsByBrand($brand,$sn){
+        $models = self::getModelsByBrand($brand);
+        foreach($models as $model){
+            $sn->remove($model);
+            $sn->flush();
+        }
+        
+    }
+
+    static private function getModelsByBrand($brand){
+        $models = $brand->getModels();
+        return $models;
         
     }
 //    /**

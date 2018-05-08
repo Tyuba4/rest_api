@@ -24,7 +24,7 @@ class ModelRepository extends ServiceEntityRepository
     
     public function createNewModel($request,$doctrine){
         
-        $brand = BrandRepository::getBrandRepositoryByName($request->get('brand_name'), $doctrine);
+        $brand = BrandRepository::getPublicBrandRepositoryByName($request->get('brand_name'), $doctrine);
         if (!$brand) {
             throw new NotFoundHttpException(
                 'Brand not found'
@@ -44,7 +44,7 @@ class ModelRepository extends ServiceEntityRepository
     }
     
     public function getModel($brand_name, $model_name, $doctrine){
-        $brand = BrandRepository::getBrandRepositoryByName($brand_name, $doctrine);
+        $brand = BrandRepository::getPublicBrandRepositoryByName($brand_name, $doctrine);
         if (!$brand) {
             throw new NotFoundHttpException(
                 'Brand not found'
@@ -69,7 +69,7 @@ class ModelRepository extends ServiceEntityRepository
     }
     
     public function updateModel($brand_name, $model_name, $doctrine, $request){
-        $brand = BrandRepository::getBrandRepositoryByName($brand_name, $doctrine);
+        $brand = BrandRepository::getPublicBrandRepositoryByName($brand_name, $doctrine);
         if (!$brand) {
             throw new NotFoundHttpException(
                 'Brand not found'
@@ -97,7 +97,7 @@ class ModelRepository extends ServiceEntityRepository
         }
     }
     public function deleteModel($brand_name, $model_name, $doctrine) {
-        $brand = BrandRepository::getBrandRepositoryByName($brand_name, $doctrine);
+        $brand = BrandRepository::getPublicBrandRepositoryByName($brand_name, $doctrine);
         if (!$brand) {
             throw new NotFoundHttpException(
                 'Brand not found'
@@ -118,39 +118,6 @@ class ModelRepository extends ServiceEntityRepository
             throw new NotFoundHttpException(
                 'Model not found'
             );
-        }
-        
+        }  
     }
-    
-    
-    
-
-//    /**
-//     * @return Model[] Returns an array of Model objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Model
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

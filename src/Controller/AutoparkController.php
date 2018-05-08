@@ -39,7 +39,7 @@ class AutoparkController extends FOSRestController
     public function getBrandAction($name)
     {
         $brand = $this->getDoctrine()->getRepository(Brand::class)
-                ->findOneBy(['name'=>$name]);
+                ->findOneByName($name, $this->getDoctrine());
         return View::create($brand, Response::HTTP_OK, []);
         
     }
